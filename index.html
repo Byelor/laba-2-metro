@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Метрики Джилба — Go</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:0;display:flex;gap:16px;padding:16px;height:100vh;box-sizing:border-box}
+textarea{flex:1;font:14px/1.4 ui-monospace,Menlo,Consolas,monospace;padding:8px;resize:none;tab-size:4}
+aside{width:300px;overflow:auto}
+.m{margin-bottom:10px}.m b{display:block;font-size:24px}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #8884;padding:2px 6px;text-align:left}
+</style></head><body>
+<textarea id="code" spellcheck="false" placeholder="Вставьте код на Go или откройте файл"></textarea>
+<aside>
+<input type="file" id="file" accept=".go,text/plain">
+<div class="m">Абсолютная сложность CL<b id="CL">0</b></div>
+<div class="m">Число операторов<b id="ops">0</b></div>
+<div class="m">Относительная сложность cl<b id="cl">0</b></div>
+<div class="m">Макс. вложенность CLI<b id="CLI">0</b></div>
+<div class="m">Число Маккейба Z(G)<b id="McCabe">1</b></div>
+<table><thead><tr><th>Строка</th><th>Вид</th><th>Уровень</th></tr></thead><tbody id="found"></tbody></table>
+</aside>
+<script src="dist/analyzer.js"></script>
+<script src="dist/ui.js"></script>
+</body></html>

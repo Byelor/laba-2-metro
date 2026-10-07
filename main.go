@@ -24,13 +24,6 @@ func main() {
 		sum += v
 	}
 
-	for {
-		n--
-		if n <= 0 {
-			break
-		}
-	}
-
 	switch sum % 4 {
 	case 0:
 		fmt.Println("zero")

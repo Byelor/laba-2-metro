@@ -1,15 +1,26 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Метрики Джилба — Go</title>
+<style>
+body{font-family:system-ui,sans-serif;margin:0;display:flex;gap:16px;padding:16px;height:100vh;box-sizing:border-box}
+textarea{flex:1;font:14px/1.4 ui-monospace,Menlo,Consolas,monospace;padding:8px;resize:none;tab-size:4}
+aside{width:300px;overflow:auto}
+.m{margin-bottom:10px}.m b{display:block;font-size:24px}
+table{border-collapse:collapse;width:100%}td,th{border:1px solid #8884;padding:2px 6px;text-align:left}
+</style></head><body>
+<textarea id="code" spellcheck="false" placeholder="Вставьте код на Go или откройте файл"></textarea>
+<aside>
+<input type="file" id="file" accept=".go,text/plain">
+<div class="m">Абсолютная сложность CL<b id="CL">0</b></div>
+<div class="m">Число операторов<b id="ops">0</b></div>
+<div class="m">Относительная сложность cl<b id="cl">0</b></div>
+<div class="m">Макс. вложенность CLI<b id="CLI">0</b></div>
+<div class="m">Число Маккейба Z(G)<b id="McCabe">1</b></div>
+<table><thead><tr><th>Строка</th><th>Вид</th><th>Вложенность</th></tr></thead><tbody id="found"></tbody></table>
+</aside>
+<script>
 "use strict";
-/*
- * Метрики Джилба (и Маккейба) для программ на Go.
- *
- * Правила:
- *  - CL: каждый if (в т.ч. каждый else if), каждый for (любая форма: классический,
- *    «while»-стиль, бесконечный, range) и каждая ветка case в switch/select.
- *  - switch из k веток case == k вложенных if. Селектор и default не считаются.
- *  - CLI: максимальный уровень вложенности, отсчёт с 0 (одиночный if -> 0).
- *  - Оператор (для cl = CL / число операторов): простая инструкция + каждое
- *    ветвление. break, fallthrough, package, import, type и заголовки func не считаются.
- */
 const KEYWORDS = new Set(['break', 'case', 'chan', 'const', 'continue', 'default', 'defer', 'else',
     'fallthrough', 'for', 'func', 'go', 'goto', 'if', 'import', 'interface', 'map', 'package',
     'range', 'return', 'select', 'struct', 'switch', 'type', 'var']);
@@ -324,3 +335,36 @@ class Analyzer {
 function analyze(src) { return new Analyzer(src).run(); }
 if (typeof module !== 'undefined')
     module.exports = { analyze };
+
+</script>
+<script>
+"use strict";
+(() => {
+    if (typeof document === 'undefined')
+        return;
+    const el = (id) => document.getElementById(id);
+    const code = el('code');
+    function update() {
+        const r = analyze(code.value);
+        el('CL').textContent = String(r.CL);
+        el('ops').textContent = String(r.ops);
+        el('cl').textContent = r.cl.toFixed(2);
+        el('CLI').textContent = String(r.CLI);
+        el('McCabe').textContent = String(r.McCabe);
+        el('found').innerHTML = r.found
+            .map(b => `<tr><td>${b.line}</td><td>${b.kind}</td><td>${b.level - 1}</td></tr>`)
+            .join('');
+    }
+    code.addEventListener('input', update);
+    el('file').addEventListener('change', async (e) => {
+        const f = e.target.files?.[0];
+        if (f) {
+            code.value = await f.text();
+            update();
+        }
+    });
+    update();
+})();
+
+</script>
+</body></html>
